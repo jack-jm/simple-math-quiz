@@ -7,11 +7,12 @@ class Quiz:
     # Setting up the GUI
     self.quiz_frame = Frame()
     self.quiz_frame.grid()
+    self.quiz_frame.configure(bg="#1BA1E2")
 
     self.quiz_title = Label(self.quiz_frame,
                             text="Simple Math Quiz",
                             font=("Helvetica", 20, "bold"),
-                            fg="#FFFFFF")
+                            fg="#FFFFFF", bg="#1BA1E2")
     self.quiz_title.grid(row=0, padx=100, pady=15)
 
     instructions = ("Welcome to Simple Math Quiz!\n\n" \
@@ -25,29 +26,40 @@ class Quiz:
                             text=instructions,
                             wraplength=400,
                             font=("Helvetica", 12),
-                            fg="#FFFFFF")
+                            fg="#FFFFFF", bg="#1BA1E2")
     self.quiz_instructions.grid(row=1, padx=100, pady=15)
 
-    self.var_num1=IntVar()
-    self.var_num1.set(0)
-    self.var_num2=IntVar()
-    self.var_num2=set(0)
-
     self.quiz_question = Label(self.quiz_frame,
-                            text="{} + {} =".format(num1, num2),
-                            font=("Helvetica", 16),
-                            fg="#FFEE00")
+                            text="",
+                            font=("Helvetica", 24, "bold"),
+                            fg="#FFEE00", bg="#1BA1E2")
     self.quiz_question.grid(row=2, padx=100, pady=15)
 
-  def numbers(self):
-    num_1=random.randint(1,10)
-    num_2=random.randint(1,10)
+    self.answer_entry = Entry(self.quiz_frame,
+                            font=("Helvetica", "24")
+                            )
+    self.answer_entry.grid(row=3, padx=10, pady=10)
+
+    self.submit_button = Button(self.quiz_frame,
+                                text="Submit",
+                                font=("Helvetica", 16),
+                                fg="#FFFFFF", bg="#E11584",
+                                command=self.generate_nums)
+    self.submit_button.grid(row=4)
 
 
-# Main routine
+  def generate_nums(self):
+    nums_list = [0, 0]
+    nums_list[0]=random.randint(1,10)
+    nums_list[1]=random.randint(1,10)
+    question_text="{} + {} =".format(nums_list[0], nums_list[1])
+    self.quiz_question.config(text=question_text)
+
+
+ # Main routine
 if __name__ == "__main__":
   root = Tk()
   root.title("Simple Math Quiz")
+  root.configure(bg="#FFFFFF")
+  Quiz()
   root.mainloop()
-
-  print(answer)

@@ -28,26 +28,30 @@ class Quiz:
                             fg="#FFFFFF")
     self.quiz_instructions.grid(row=1, padx=100, pady=15)
 
-    self.var_num1=IntVar()
-    self.var_num1.set(0)
-    self.var_num2=IntVar()
-    self.var_num2=set(0)
-
     self.quiz_question = Label(self.quiz_frame,
-                            text="{} + {} =".format(num1, num2),
+                            text="",
                             font=("Helvetica", 16),
                             fg="#FFEE00")
     self.quiz_question.grid(row=2, padx=100, pady=15)
 
-  def numbers(self):
-    num_1=random.randint(1,10)
-    num_2=random.randint(1,10)
+    self.submit_button = Button(self.quiz_frame,
+                                text="Submit",
+                                font=("Helvetica", 16),
+                                fg="#FFFFFF", bg="#E11584",
+                                command=self.generate_nums)
+    self.submit_button.grid(row=3)
+
+  def generate_nums(self):
+    nums_list = [0, 0]
+    nums_list[0]=random.randint(1,10)
+    nums_list[1]=random.randint(1,10)
+    question_text="{} + {} =".format(nums_list[0], nums_list[1])
+    self.quiz_question.config(text=question_text)
 
 
-# Main routine
+ # Main routine
 if __name__ == "__main__":
   root = Tk()
   root.title("Simple Math Quiz")
+  Quiz()
   root.mainloop()
-
-  print(answer)
