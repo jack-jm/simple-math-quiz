@@ -13,7 +13,7 @@ class Quiz:
                             text="Simple Math Quiz",
                             font=("Helvetica", 20, "bold"),
                             fg="#FFFFFF", bg="#1BA1E2")
-    self.quiz_title.grid(row=0, padx=100, pady=15)
+    self.quiz_title.grid(row=0, padx=70, pady=15)
 
     instructions = ("Welcome to Simple Math Quiz!\n\n" \
                     "To start solving some math problems, simply " \
@@ -27,25 +27,41 @@ class Quiz:
                             wraplength=400,
                             font=("Helvetica", 12),
                             fg="#FFFFFF", bg="#1BA1E2")
-    self.quiz_instructions.grid(row=1, padx=100, pady=15)
+    self.quiz_instructions.grid(row=1, padx=70, pady=15)
 
     self.quiz_question = Label(self.quiz_frame,
-                            text="",
-                            font=("Helvetica", 24, "bold"),
+                            text="{} + {} =".format(random.randint(1,10), random.randint(1,10)),
+                            font=("Helvetica", 30, "bold"),
                             fg="#FFEE00", bg="#1BA1E2")
-    self.quiz_question.grid(row=2, padx=100, pady=15)
+    self.quiz_question.grid(row=2, padx=70, pady=15)
 
     self.answer_entry = Entry(self.quiz_frame,
                             font=("Helvetica", "24")
                             )
     self.answer_entry.grid(row=3, padx=10, pady=10)
 
-    self.submit_button = Button(self.quiz_frame,
+    self.feedback_message = Label(self.quiz_frame,
+                                 text="This is a placeholder",
+                                 font=("Helvetica", 14, "bold"),
+                                 fg="#FFEE00", bg="#1BA1E2")
+    self.feedback_message.grid(row=4)
+
+    self.button_frame = Frame(self.quiz_frame)
+    self.button_frame.grid(row=5)
+    self.button_frame.configure(bg="#1BA1E2")
+    
+    self.submit_button = Button(self.button_frame,
                                 text="Submit",
-                                font=("Helvetica", 16),
+                                font=("Helvetica", 24, "bold"),
                                 fg="#FFFFFF", bg="#E11584",
                                 command=self.generate_nums)
-    self.submit_button.grid(row=4)
+    self.submit_button.grid(row=5, column=0, padx=10, pady=10)
+
+    self.results_button = Button(self.button_frame,
+                                text="Results",
+                                font=("Helvetica", 24, "bold"),
+                                fg="#FFFFFF", bg="#008A00")
+    self.results_button.grid(row=5, column=1, padx=10, pady=10)
 
 
   def generate_nums(self):
@@ -60,6 +76,5 @@ class Quiz:
 if __name__ == "__main__":
   root = Tk()
   root.title("Simple Math Quiz")
-  root.configure(bg="#FFFFFF")
   Quiz()
   root.mainloop()
