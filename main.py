@@ -36,7 +36,7 @@ class Quiz:
     self.quiz_question.grid(row=2, padx=70, pady=15)
 
     self.answer_entry = Entry(self.quiz_frame,
-                            font=("Helvetica", "24")
+                            font=("Helvetica", 24)
                             )
     self.answer_entry.grid(row=3, padx=10, pady=10)
 
