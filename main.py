@@ -54,7 +54,7 @@ class Quiz:
                                 text="Submit",
                                 font=("Helvetica", 24, "bold"),
                                 fg="#FFFFFF", bg="#E11584",
-                                command=self.generate_nums)
+                                command=self.check_input)
     self.submit_button.grid(row=5, column=0, padx=10, pady=10)
 
     self.results_button = Button(self.button_frame,
@@ -63,6 +63,18 @@ class Quiz:
                                 fg="#FFFFFF", bg="#008A00")
     self.results_button.grid(row=5, column=1, padx=10, pady=10)
 
+  def check_input(self):
+    response = self.answer_entry.get()
+
+    try:
+      guess = int(response)
+    except ValueError:
+      self.feedback_message.config(text="Please enter an integer as your answer.")
+      self.feedback_message.config(fg="#FF0000")
+
+    if self.feedback_message.cget("text") != "Please enter an integer as your answer.":
+      self.generate_nums()
+    
 
   def generate_nums(self):
     nums_list = [0, 0]
@@ -70,7 +82,7 @@ class Quiz:
     nums_list[1]=random.randint(1,10)
     question_text="{} + {} =".format(nums_list[0], nums_list[1])
     self.quiz_question.config(text=question_text)
-
+    
 
  # Main routine
 if __name__ == "__main__":
