@@ -1,6 +1,7 @@
 from tkinter import *
 import random
 
+
 class Quiz:
   def __init__(self):
 
@@ -8,6 +9,9 @@ class Quiz:
     self.quiz_frame = Frame()
     self.quiz_frame.grid()
     self.quiz_frame.configure(bg="#1BA1E2")
+
+    self.num1 = random.randint(1,10)
+    self.num2 = random.randint(1,10)
 
     self.quiz_title = Label(self.quiz_frame,
                             text="Simple Math Quiz",
@@ -49,7 +53,7 @@ class Quiz:
     self.button_frame = Frame(self.quiz_frame)
     self.button_frame.grid(row=5)
     self.button_frame.configure(bg="#1BA1E2")
-    
+
     self.submit_button = Button(self.button_frame,
                                 text="Submit",
                                 font=("Helvetica", 24, "bold"),
@@ -65,22 +69,30 @@ class Quiz:
 
   def check_input(self):
     try:
-      guess = int(self.answer_entry.get())
+      self.guess = int(self.answer_entry.get())
     except ValueError:
       self.feedback_message.config(text="Please enter an integer as your answer.")
       self.feedback_message.config(fg="#FF0000")
 
     if self.feedback_message.cget("text") != "Please enter an integer as your answer.":
-      self.generate_nums()
-    
+      self.correct_incorrect()
+
+  def correct_incorrect(self):
+    if self.guess == self.num1 + self.num2:
+      self.feedback_message.config(text="Correct")
+      self.feedback_message.config(fg="#00FF00")
+    else:
+      self.feedback_message.config(text="Incorrect")
+      self.feedback_message.config(fg="#FF0000")
+    self.generate_nums()
 
   def generate_nums(self):
-    nums_list = [0, 0]
-    nums_list[0]=random.randint(1,10)
-    nums_list[1]=random.randint(1,10)
-    question_text="{} + {} =".format(nums_list[0], nums_list[1])
+    self.num1 = random.randint(1,10)
+    self.num2 = random.randint(1,10)
+    question_text="{} + {} =".format(self.num1, self.num2)
     self.quiz_question.config(text=question_text)
-    
+    self.correct_incorrect()
+
 
  # Main routine
 if __name__ == "__main__":
