@@ -86,7 +86,8 @@ class Quiz:
                                  font=("Helvetica", 24, "bold"),
                                  fg="#FFFFFF",
                                  bg="#008A00",
-                                 state=DISABLED)
+                                 state=DISABLED,
+                                 command=self.to_results)
     self.results_button.grid(row=0, column=1, padx=10, pady=10)
 
   # This function will check that the user has entered an integer
@@ -132,6 +133,20 @@ class Quiz:
     self.operation = self.operation_list[random.randint(0, 1)]
     # Configure the question text with the new numbers and new operation
     self.quiz_question.config(text="{} {} {} =".format(self.num1, self.operation, self.num2))
+
+  def to_results(self):
+    Results()
+
+class Results:
+
+  def __init__(self):
+    self.results_box = Toplevel()
+    
+    self.results_frame = Frame()
+    self.results_frame.grid()
+    
+    self.results_frame.configure(bg="#60A917")
+
 
 # Main routine
 if __name__ == "__main__":
