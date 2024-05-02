@@ -86,7 +86,8 @@ class Quiz:
                                  font=("Helvetica", 24, "bold"),
                                  fg="#FFFFFF",
                                  bg="#008A00",
-                                 state=DISABLED)
+                                 state=DISABLED,
+                                 command=self.to_results)
     self.results_button.grid(row=0, column=1, padx=10, pady=10)
 
   # This function will check that the user has entered an integer
@@ -132,6 +133,75 @@ class Quiz:
     self.operation = self.operation_list[random.randint(0, 1)]
     # Configure the question text with the new numbers and new operation
     self.quiz_question.config(text="{} {} {} =".format(self.num1, self.operation, self.num2))
+
+  def to_results(self):
+    # Go to the results class
+    Results(self)
+
+class Results:
+
+  def __init__(self, partner):
+    # Creating the results box
+    self.results_box = Toplevel()
+
+    # Disable the results button on the main quiz so no more windows can be created
+    partner.results_button.config(state=DISABLED)
+
+    # Creating results frame
+    self.results_frame = Frame(self.results_box, bg="#60A917")
+    self.results_frame.grid()
+
+    # Creating the heading for the results page
+    self.results_heading = Label(self.results_frame,
+                                 bg="#60A917",
+                                 fg= "#FFFFFF",
+                                 text="Results",
+                                 font=("Helvetica", 20, "bold"))
+    self.results_heading.grid(row=0)
+
+    # Main results text to be shown
+    results_text = "\nWell done!\n\n" \
+                   "You answered _ out of _ questions correctly.\n\n" \
+                   "That's _%!\n\n" \
+                   "Play again soon to try for an even better score!\n\n" \
+                   "If you want to view your results and all the answers you\n" \
+                   "gave, you can export a text file " \
+                   "by pressing 'Export'.\n\n" \
+                   "Otherwise, you can close this menu with 'Close'.\n"
+
+    # Creating results text label
+    self.results_text_label = Label(self.results_frame,
+                                    bg="#60A917",
+                                    fg= "#FFFFFF",
+                                    text=results_text,
+                                    font=("Helvetica", 11))
+    self.results_text_label.grid(row=1, padx=10)
+
+    # Creating the entrybox for the filename
+    self.results_filename_entry = Entry(self.results_frame, font=("Helvetica", 24))
+    self.results_filename_entry.grid(row=2, padx=40)
+
+    # Creating the frame for the buttons
+    self.results_button_frame = Frame(self.results_frame)
+    self.results_button_frame.grid(row=3)
+    self.results_button_frame.configure(bg="#60A917")
+
+    # Creating export button
+    self.export_button = Button(self.results_button_frame,
+                                text="Export",
+                                font=("Helvetica", 24, "bold"),
+                                fg="#FFFFFF",
+                                bg="#E11584")
+    self.export_button.grid(row=0, column=0, padx=10, pady=10)
+
+    # Creating close button
+    self.close_button = Button(self.results_button_frame,
+                               text="Close",
+                               font=("Helvetica", 24, "bold"),
+                               fg="#FFFFFF",
+                               bg="#1BA1E2")
+    self.close_button.grid(row=0, column=1, padx=10, pady=10)
+
 
 # Main routine
 if __name__ == "__main__":
