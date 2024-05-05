@@ -210,6 +210,9 @@ class Results:
                                bg="#1BA1E2")
     self.close_button.grid(row=0, column=1, padx=10, pady=10)
 
+  def check_filename():
+    
+
 
 # Main routine
 if __name__ == "__main__":
