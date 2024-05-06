@@ -1,5 +1,7 @@
 from tkinter import *
 import random
+import re
+import datetime
 
 
 class Quiz:
@@ -199,7 +201,8 @@ class Results:
                                 text="Export",
                                 font=("Helvetica", 24, "bold"),
                                 fg="#FFFFFF",
-                                bg="#E11584")
+                                bg="#E11584",
+                                command=self.assign_filename)
     self.export_button.grid(row=0, column=0, padx=10, pady=10)
 
     # Creating close button
@@ -210,8 +213,35 @@ class Results:
                                bg="#1BA1E2")
     self.close_button.grid(row=0, column=1, padx=10, pady=10)
 
-  def check_filename():
+  def assign_filename(self):
+    name_to_export = ""
+    if self.results_filename_entry.get() != "":
+      filename_validity = self.check_filename(self.results_filename_entry.get())
+      if filename_validity == "valid":
+        name_to_export = self.results_filename_entry.get()
+        self.results_feedback_message.config(text="Exported as {}.txt".format(name_to_export))
+      else:
+        self.results_feedback_message.config(text="ERROR")
+    else:
+      name_to_export = "todaydate"
+      self.results_feedback_message.config(text="GOOD")
     
+
+
+  def check_filename(self, filename):
+    valid_characters = "[A-Za-z0-9_]"
+    issue = ""
+    for letter in filename:
+      if re.match(valid_characters, letter):
+        continue
+      else:
+        issue = "bad"
+        
+    if issue == "bad":
+      return "invalid"
+    else:
+      return "valid"
+        
 
 
 # Main routine
