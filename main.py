@@ -1,5 +1,7 @@
 from tkinter import *
 import random
+import re
+from datetime import date
 
 
 class Quiz:
@@ -185,9 +187,10 @@ class Results:
     self.results_feedback_message = Label(self.results_frame,
                                           bg="#60A917",
                                           fg="#FFFFFF",
-                                          text="This is a placeholder",
-                                          font=("Helvetica", 14, "bold"))
-    self.results_feedback_message.grid(row=3)
+                                          text="",
+                                          font=("Helvetica", 14, "bold"),
+                                          wraplength=500)
+    self.results_feedback_message.grid(row=3, padx=10)
 
     # Creating the frame for the buttons
     self.results_button_frame = Frame(self.results_frame)
@@ -199,7 +202,8 @@ class Results:
                                 text="Export",
                                 font=("Helvetica", 24, "bold"),
                                 fg="#FFFFFF",
-                                bg="#E11584")
+                                bg="#E11584",
+                                command=self.assign_filename)
     self.export_button.grid(row=0, column=0, padx=10, pady=10)
 
     # Creating close button
@@ -209,6 +213,43 @@ class Results:
                                fg="#FFFFFF",
                                bg="#1BA1E2")
     self.close_button.grid(row=0, column=1, padx=10, pady=10)
+
+  def assign_filename(self):
+    name_to_export = ""
+    if self.results_filename_entry.get() != "":
+      filename_validity = self.check_filename(self.results_filename_entry.get())
+      if filename_validity == "valid":
+        name_to_export = self.results_filename_entry.get()
+        self.results_feedback_message.config(text="Exported as {}.txt".format(name_to_export), 
+                                             fg="#1A43BF")
+      else:
+        self.results_feedback_message.config(text="Please ensure your filename contains " \
+                                                  "only letters, numbers, and underscores " \
+                                                  "and try again.",
+                                             fg="#B22222")
+    else:
+      today = date.today()
+      date_to_export = today.strftime("%Y_%m_%d")
+      name_to_export = ("{}_results".format(date_to_export))
+      self.results_feedback_message.config(text="Exported as {}.txt".format(name_to_export),
+                                           fg="#1A43BF")
+
+
+
+  def check_filename(self, filename):
+    valid_characters = "[A-Za-z0-9_]"
+    issue = ""
+    for letter in filename:
+      if re.match(valid_characters, letter):
+        continue
+      else:
+        issue = "yes"
+
+    if issue == "yes":
+      return "invalid"
+    else:
+      return "valid"
+
 
 
 # Main routine

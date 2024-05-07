@@ -1,7 +1,7 @@
 from tkinter import *
 import random
 import re
-import datetime
+from datetime import date
 
 
 class Quiz:
@@ -187,9 +187,10 @@ class Results:
     self.results_feedback_message = Label(self.results_frame,
                                           bg="#60A917",
                                           fg="#FFFFFF",
-                                          text="This is a placeholder",
-                                          font=("Helvetica", 14, "bold"))
-    self.results_feedback_message.grid(row=3)
+                                          text="",
+                                          font=("Helvetica", 14, "bold"),
+                                          wraplength=500)
+    self.results_feedback_message.grid(row=3, padx=10)
 
     # Creating the frame for the buttons
     self.results_button_frame = Frame(self.results_frame)
@@ -219,12 +220,18 @@ class Results:
       filename_validity = self.check_filename(self.results_filename_entry.get())
       if filename_validity == "valid":
         name_to_export = self.results_filename_entry.get()
-        self.results_feedback_message.config(text="Exported as {}.txt".format(name_to_export))
+        self.results_feedback_message.config(text="Exported as {}.txt".format(name_to_export), 
+                                             fg="#1A43BF")
       else:
-        self.results_feedback_message.config(text="ERROR")
+        self.results_feedback_message.config(text="Please ensure your filename contains\n" \
+                                                  "only letters, numbers, and underscores.",
+                                             fg="#B22222")
     else:
-      name_to_export = "todaydate"
-      self.results_feedback_message.config(text="GOOD")
+      today = date.today()
+      date_to_export = today.strftime("%Y_%m_%d")
+      name_to_export = ("{}_results".format(date_to_export))
+      self.results_feedback_message.config(text="Exported as {}.txt".format(name_to_export),
+                                           fg="1A43BF")
     
 
 
@@ -235,9 +242,9 @@ class Results:
       if re.match(valid_characters, letter):
         continue
       else:
-        issue = "bad"
+        issue = "yes"
         
-    if issue == "bad":
+    if issue == "yes":
       return "invalid"
     else:
       return "valid"
