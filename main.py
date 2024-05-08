@@ -22,6 +22,14 @@ class Quiz:
     # Randomly picking one operation to be used
     self.operation = self.operation_list[random.randint(0, 1)]
 
+    # Create counters for correct and total answers given
+    self.correct_answers_given = 0
+    self.total_answers_given = 0
+
+    # Creating the lists to keep the questions asked and answers given
+    self.list_of_questions = []
+    self.list_of_answers = []
+
     # Creating the main title and giving its position
     self.quiz_title = Label(self.quiz_frame,
                             text="Simple Math Quiz",
@@ -118,10 +126,18 @@ class Quiz:
     if self.guess == correct_answer:
       self.feedback_message.config(text="Correct!")
       self.feedback_message.config(fg="#00FF00")
+      # Add one to the count of correct answers
+      self.correct_answers_given += 1
+
     # Otherwise, tell them they are incorrect
     else:
       self.feedback_message.config(text="Incorrect: the answer was {}.".format(correct_answer))
       self.feedback_message.config(fg="#b22222")
+    # Whether or not they are correct, add one to the total answer count
+    self.total_answers_given += 1
+    # Appending the list
+    self.list_of_questions.append("{} {} {} =".format(self.num1, self.operation, self.num2))
+    self.list_of_answers.append(self.guess)
     # Whether or not they are correct, send them to generate_nums function
     self.generate_nums()
 
@@ -137,6 +153,9 @@ class Quiz:
     self.quiz_question.config(text="{} {} {} =".format(self.num1, self.operation, self.num2))
 
   def to_results(self):
+    print("correct:", str(self.correct_answers_given), "total:", str(self.total_answers_given))
+    print(self.list_of_questions)
+    print(self.list_of_answers)
     # Go to the results class
     Results(self)
 
@@ -233,6 +252,7 @@ class Results:
       name_to_export = ("{}_results".format(date_to_export))
       self.results_feedback_message.config(text="Exported as {}.txt".format(name_to_export),
                                            fg="#1A43BF")
+    
 
 
 
