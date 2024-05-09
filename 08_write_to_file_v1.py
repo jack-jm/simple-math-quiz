@@ -23,8 +23,8 @@ class Quiz:
     self.operation = self.operation_list[random.randint(0, 1)]
 
     # Create counters for correct and total answers given
-    self.correct_answers_given = 0
-    self.total_answers_given = 0
+    self.correct_answers_counter = 0
+    self.total_answers_counter = 0
 
     # Creating the lists to keep the questions asked and answers given
     self.list_of_questions = []
@@ -127,14 +127,14 @@ class Quiz:
       self.feedback_message.config(text="Correct!")
       self.feedback_message.config(fg="#00FF00")
       # Add one to the count of correct answers
-      self.correct_answers_given += 1
+      self.correct_answers_counter += 1
 
     # Otherwise, tell them they are incorrect
     else:
       self.feedback_message.config(text="Incorrect: the answer was {}.".format(correct_answer))
       self.feedback_message.config(fg="#b22222")
     # Whether or not they are correct, add one to the total answer count
-    self.total_answers_given += 1
+    self.total_answers_counter += 1
     # Appending the lists
     self.list_of_questions.append("{} {} {} =".format(self.num1, self.operation, self.num2))
     self.list_of_answers.append(str(self.guess))
@@ -153,7 +153,7 @@ class Quiz:
     self.quiz_question.config(text="{} {} {} =".format(self.num1, self.operation, self.num2))
 
   def to_results(self):
-    print("correct:", str(self.correct_answers_given), "total:", str(self.total_answers_given))
+    print("correct:", str(self.correct_answers_counter), "total:", str(self.total_answers_counter))
     print(self.list_of_questions)
     print(self.list_of_answers)
     # Go to the results class
@@ -181,7 +181,11 @@ class Results:
     self.results_heading.grid(row=0)
 
     # Main results text to be shown
-    correct_percentage = round((partner.correct_answers_given / partner.total_answers_given) * 100)
+    self.correct_answers_given = partner.correct_answers_counter
+    self.total_answers_given = partner.total_answers_counter
+    self.questions_to_export = partner.list_of_questions
+    self.answers_to_export = partner.list_of_answers
+    self.correct_percentage = round((self.correct_answers_given / self.total_answers_given) * 100)
     results_text = "\nWell done!\n\n" \
                    "You answered {} out of {} questions correctly.\n\n" \
                    "That's {}%!\n\n" \
@@ -189,7 +193,7 @@ class Results:
                    "If you want to view your results and all the answers you\n" \
                    "gave, you can export a text file " \
                    "by pressing 'Export'.\n\n" \
-                   "Otherwise, you can close this menu with 'Close'.\n".format(partner.correct_answers_given, partner.total_answers_given, correct_percentage)
+                   "Otherwise, you can close this menu with 'Close'.\n".format(self.correct_answers_given, self.total_answers_given, self.correct_percentage)
 
     # Creating results text label
     self.results_text_label = Label(self.results_frame,
@@ -235,25 +239,27 @@ class Results:
     self.close_button.grid(row=0, column=1, padx=10, pady=10)
 
   def assign_filename(self):
+    today = date.today()
     name_to_export = ""
+    self.date_to_export = today.strftime("%Y_%m_%d")
     if self.results_filename_entry.get() != "":
       filename_validity = self.check_filename(self.results_filename_entry.get())
       if filename_validity == "valid":
         name_to_export = self.results_filename_entry.get()
         self.results_feedback_message.config(text="Exported as {}.txt".format(name_to_export), 
                                              fg="#1A43BF")
+        self.write_to_file(name_to_export)
       else:
         self.results_feedback_message.config(text="Please ensure your filename contains " \
                                                   "only letters, numbers, and underscores " \
                                                   "and try again.",
                                              fg="#B22222")
     else:
-      today = date.today()
-      date_to_export = today.strftime("%Y_%m_%d")
-      name_to_export = ("{}_results".format(date_to_export))
+      name_to_export = ("{}_results".format(self.date_to_export))
       self.results_feedback_message.config(text="Exported as {}.txt".format(name_to_export),
                                            fg="#1A43BF")
-    
+      self.write_to_file(name_to_export)
+
 
 
 
@@ -270,6 +276,34 @@ class Results:
       return "invalid"
     else:
       return "valid"
+
+  def write_to_file(self, filename):
+    file_heading = "*** Your Questions and Answers: Simple Math Quiz ***\n"
+    file_date = "Date: {}\n".format(self.date_to_export)
+    file_statistics = "You answered {} out of {} questions correctly, That's {}%!\n".format(self.correct_answers_given,
+                      self.total_answers_given, self.correct_percentage)
+    results_to_export = []
+    i = 0
+    for item in self.questions_to_export:
+      results_to_export.append("{} {}".format(self.questions_to_export[i], self.answers_to_export[i]))
+      i += 1
+    print(results_to_export)
+    list_to_export = ""
+    for item in results_to_export:
+      list_to_export += item + "\n"
+  
+    output_list = [file_heading, file_date, file_statistics, list_to_export]
+  
+    text_file = open(filename, "w+")
+  
+    for item in output_list:
+      text_file.write(item)
+      text_file.write("\n")
+  
+    text_file.close()
+
+
+
 
 
 
