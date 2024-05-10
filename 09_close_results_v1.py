@@ -2,7 +2,7 @@ from tkinter import *
 import random
 import re
 from datetime import date
-
+from functools import partial
 
 class Quiz:
 
@@ -162,6 +162,11 @@ class Results:
     # Creating the results box
     self.results_box = Toplevel()
 
+    # If user presses the X button, the results box is closed and
+    # the results button is re-enabled
+    self.results_box.protocol('WM_DELETE_WINDOW',
+                              partial(self.close_results, partner))
+
     # Disable the results button on the main quiz so no more windows can be created
     partner.results_button.config(state=DISABLED)
 
@@ -237,7 +242,8 @@ class Results:
                                text="Close",
                                font=("Helvetica", 24, "bold"),
                                fg="#FFFFFF",
-                               bg="#1BA1E2")
+                               bg="#1BA1E2",
+                               command=partial(self.close_results, partner))
     self.close_button.grid(row=0, column=1, padx=10, pady=10)
 
   # This function will assign a filename to the text file based on its validity
@@ -317,7 +323,7 @@ class Results:
       results_to_export.append("{} {}".format(self.questions_to_export[i], self.answers_to_export[i]))
       # Increase counter by one
       i += 1
-    
+
     list_to_export = ""
     # For every item in the combined list, add it on a new line in the string to export
     for item in results_to_export:
@@ -334,6 +340,12 @@ class Results:
       text_file.write("\n")
 
     text_file.close()
+
+  def close_results(self, partner):
+    # Re-enable the results button on the quiz page
+    partner.results_button.config(state=NORMAL)
+    # Destroy the results box
+    self.results_box.destroy()
 
 # Main routine
 if __name__ == "__main__":
