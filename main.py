@@ -1,8 +1,9 @@
 from tkinter import *
 import random
 import re
-from datetime import date
+from datetime import datetime
 from functools import partial
+from pytz import timezone
 
 class Quiz:
 
@@ -248,12 +249,12 @@ class Results:
 
   # This function will assign a filename to the text file based on its validity
   def assign_filename(self):
-    # Getting current date
-    today = date.today()
+    # Getting current date and time in NZ time
+    now = datetime.now(timezone("NZ"))
     # Creating filename to export
     name_to_export = ""
     # Creating the formatted date to export
-    self.date_to_export = today.strftime("%Y_%m_%d")
+    self.date_to_export = now.strftime("%Y_%m_%d")
     # If the filename entry box is not blank, then
     if self.results_filename_entry.get() != "":
       # Check the filename validity with the check_filename function

@@ -1,0 +1,10 @@
+*** Your Questions and Answers: Simple Math Quiz ***
+
+Date: 2024_05_12
+
+You answered 2 out of 3 questions correctly, That's 67%!
+
+3 + 5 = 8
+1 - 5 = -4
+7 + 5 = 1
+
