@@ -7,6 +7,7 @@ from pytz import timezone
 
 class Quiz:
 
+  # Initial function
   def __init__(self):
 
     # Setting up the GUI frame, grid and background colour
@@ -103,7 +104,7 @@ class Quiz:
 
   # This function will check that the user has entered an integer
   def check_input(self):
-    # Try and see if the guess was an integer then try to go to correct_incorrect function
+    # Try and see if the guess was an integer, then try to go to correct_incorrect function
     try:
       self.guess = int(self.answer_entry.get())
       self.results_button.config(state=NORMAL)
@@ -153,12 +154,14 @@ class Quiz:
     # Configure the question text with the new numbers and new operation
     self.quiz_question.config(text="{} {} {} =".format(self.num1, self.operation, self.num2))
 
+  # This function will go to the results class
   def to_results(self):
     # Go to the results class
     Results(self)
 
 class Results:
 
+  # Initial function
   def __init__(self, partner):
     # Creating the results box
     self.results_box = Toplevel()
@@ -183,13 +186,10 @@ class Results:
                                  font=("Helvetica", 20, "bold"))
     self.results_heading.grid(row=0)
 
-    # Putting the correct answers counter into a self variable
+    # Putting the counters and lists for questions and answers into self variables
     self.correct_answers_given = partner.correct_answers_counter
-    # Putting the total answers counter into a self variable
     self.total_answers_given = partner.total_answers_counter
-    # Putting the list of questions into a self variable
     self.questions_to_export = partner.list_of_questions
-    # Putting the list of answers into a self variable
     self.answers_to_export = partner.list_of_answers
     # Calculating the correct percentage and rounding it to zero dp
     self.correct_percentage = round((self.correct_answers_given / self.total_answers_given) * 100)
@@ -251,7 +251,7 @@ class Results:
   def assign_filename(self):
     # Getting current date and time in NZ time
     now = datetime.now(timezone("NZ"))
-    # Creating filename to export
+    # Creating filename to export string
     name_to_export = ""
     # Creating the formatted date to export
     self.date_to_export = now.strftime("%Y_%m_%d")
@@ -301,6 +301,7 @@ class Results:
         # Set issue to yes
         issue = "yes"
 
+    # Return invalid if there is an issue, otherwise return valid
     if issue == "yes":
       return "invalid"
     else:
